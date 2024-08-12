@@ -1,11 +1,11 @@
 ---
 - name: rabbitmq_clustering | stopping rabbitmq app # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl stop_app
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} stop_app
   become: true
   when: inventory_hostname != rabbitmq_master
 
 - name: rabbitmq_clustering | resetting rabbitmq app # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl reset
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} reset
   become: true
   when: inventory_hostname != rabbitmq_master
 
@@ -46,7 +46,7 @@
   when: inventory_hostname == rabbitmq_master
 
 - name: rabbitmq_clustering | starting rabbitmq app on master # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl start_app
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} start_app
   register: cluster_master
   become: true
   when: inventory_hostname == rabbitmq_master
@@ -64,23 +64,23 @@
   when: inventory_hostname != rabbitmq_master
 
 - name: rabbitmq_clustering | stopping rabbitmq app # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl stop_app
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} stop_app
   become: true
   when: inventory_hostname != rabbitmq_master
 
 - name: rabbitmq_clustering | resetting rabbitmq app # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl reset
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} reset
   become: true
   when: inventory_hostname != rabbitmq_master
 
 - name: rabbitmq_clustering | joining rabbitmq cluster # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl join_cluster "rabbit@{{ hostvars[rabbitmq_master]['ansible_hostname'] }}"
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} join_cluster "rabbit@{{ hostvars[rabbitmq_master]['ansible_hostname'] }}"
   register: cluster_joined
   become: true
   when: inventory_hostname != rabbitmq_master
 
 - name: rabbitmq_clustering | starting rabbitmq app # noqa no-changed-when
-  ansible.builtin.command: rabbitmqctl start_app
+  ansible.builtin.command: rabbitmqctl -node {{ rabbitmq_name }} start_app
   become: true
   when: inventory_hostname != rabbitmq_master
 

@@ -95,3 +95,6 @@ rabbitmq_users:
 
 # comma separated list of plugins to enable
 rabbitmq_plugins: "rabbitmq_management"
+
+rabbitmq_name: rabbitmq
+
